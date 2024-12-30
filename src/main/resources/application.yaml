@@ -1,0 +1,18 @@
+#???
+spring:
+  application:
+    name: enlistMap
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver #??
+    username: root
+    password: xiaokeai941
+    url: jdbc:mysql:///enlist_map?serverIimeZone=UTC
+#??mybatis-plus??
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #??SQL????
+  mapper-default-scope: mapper/**.xml
+logging:
+  level:
+    com.baomidou.mybatisplus: debug # ??MyBatis-Plus?????debug
+
