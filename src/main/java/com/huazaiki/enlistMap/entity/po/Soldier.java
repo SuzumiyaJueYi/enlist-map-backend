@@ -9,7 +9,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 
+ * 入伍人员信息
  * @TableName soldier
  */
 @TableName(value ="soldier")
