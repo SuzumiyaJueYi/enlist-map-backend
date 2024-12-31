@@ -1,7 +1,7 @@
 package com.huazaiki.enlistMap.mapper;
 
-import com.huazaiki.enlistMap.entity.po.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.huazaiki.enlistMap.entity.po.User;
 
 /**
 * @author huazaiki
