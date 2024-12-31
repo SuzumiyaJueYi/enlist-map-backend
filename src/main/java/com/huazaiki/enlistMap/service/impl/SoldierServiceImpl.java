@@ -4,16 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
 import com.huazaiki.enlistMap.entity.po.Soldier;
+import com.huazaiki.enlistMap.entity.vo.ProvinceRecruitVO;
+import com.huazaiki.enlistMap.entity.vo.UserPieVO;
 import com.huazaiki.enlistMap.entity.vo.UserRadarVO;
-import com.huazaiki.enlistMap.service.SoldierService;
+import com.huazaiki.enlistMap.entity.vo.UserSortVO;
 import com.huazaiki.enlistMap.mapper.SoldierMapper;
+import com.huazaiki.enlistMap.service.SoldierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
 * @author huazaiki
@@ -157,6 +157,70 @@ public class SoldierServiceImpl extends ServiceImpl<SoldierMapper, Soldier>
             arrayList.add(ageCount);
         }
         return arrayList;
+    }
+
+    @Override
+    public UserSortVO getRecruitCountByProvince(Integer year) {
+        // 查询结果
+        List<ProvinceRecruitVO> recruitList = soldierMapper.getRecruitCountByProvince(year);
+
+        // 转换为所需的数据结构
+        UserSortVO userSortVO = new UserSortVO();
+        userSortVO.setNameData(recruitList.stream()
+                .map(ProvinceRecruitVO::getProvince)
+                .toList());
+        userSortVO.setCountData(recruitList.stream()
+                .map(ProvinceRecruitVO::getRecruitCount)
+                .toList());
+        return userSortVO;
+    }
+
+    public List<Integer> getYearlyRecruitByProvince(String province) {
+        // 查询结果
+        List<Map<String, Object>> queryResult = soldierMapper.getYearlyRecruitByProvince(province);
+
+        // 准备数据数组
+        int startYear = 2020; // 开始年份
+        int endYear = 2024;   // 结束年份（可根据实际需要调整）
+        int years = endYear - startYear + 1;
+        List<Integer> recruitData = new ArrayList<>(Collections.nCopies(years, 0));
+
+        // 填充数据
+        for (Map<String, Object> entry : queryResult) {
+            int year = (Integer) entry.get("year");
+            int recruitCount = ((Long) entry.get("recruit_count")).intValue();
+            recruitData.set(year - startYear, recruitCount);
+        }
+
+        return recruitData;
+    }
+
+    @Override
+    public List<UserPieVO> getEducationDistribution(String province, Integer year) {
+        List<Map<String, Object>> queryResult = soldierMapper.getEducationCount(province, year);
+
+        return queryResult.stream()
+                .map(entry -> {
+                    UserPieVO vo = new UserPieVO();
+                    vo.setName((String) entry.get("name"));
+                    vo.setValue((Long) entry.get("value"));
+                    return vo;
+                })
+                .toList();
+    }
+
+    @Override
+    public List<UserPieVO> getNationalRecruitByYear(Integer year) {
+        // 调用 Mapper 查询结果
+        List<Map<String, Object>> queryResult = soldierMapper.getNationalRecruitByYear(year);
+
+        // 封装数据到 UserPieVO
+        return queryResult.stream()
+                .map(entry -> new UserPieVO(
+                        ((Long) entry.get("value")), // 转换 value 为 Long
+                        (String) entry.get("name")   // 获取省份名称
+                ))
+                .toList();
     }
 }
 

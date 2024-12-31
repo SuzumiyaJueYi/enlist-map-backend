@@ -23,4 +23,57 @@
         enlistment_year,enlistment_month,create_time,
         is_deleted
     </sql>
+    <select id="getRecruitCountByProvince" resultType="com.huazaiki.enlistMap.entity.vo.ProvinceRecruitVO">
+        SELECT
+            province,
+            COUNT(*) AS recruit_count
+        FROM
+            soldier
+        WHERE
+            enlistment_year = #{year}
+          AND is_deleted = 0
+        GROUP BY
+            province
+        ORDER BY
+            recruit_count DESC
+    </select>
+    <select id="getYearlyRecruitByProvince" resultType="java.util.Map">
+        SELECT
+            enlistment_year AS year,
+            COUNT(*) AS recruit_count
+        FROM
+            soldier
+        WHERE
+            province = #{province}
+          AND is_deleted = 0
+        GROUP BY
+            enlistment_year
+        ORDER BY
+            enlistment_year ASC
+    </select>
+    <select id="getEducationCount" resultType="java.util.Map">
+        SELECT
+            education AS name,
+            COUNT(*) AS value
+        FROM
+            soldier
+        WHERE
+            province = #{province}
+          AND enlistment_year = #{year}
+          AND is_deleted = 0
+        GROUP BY
+            education;
+    </select>
+    <select id="getNationalRecruitByYear" resultType="java.util.Map">
+        SELECT
+            province AS name,
+            COUNT(*) AS value
+        FROM
+            soldier
+        WHERE
+            enlistment_year = #{year}
+          AND is_deleted = 0
+        GROUP BY
+            province;
+    </select>
 </mapper>

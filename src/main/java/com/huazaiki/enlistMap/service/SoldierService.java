@@ -1,9 +1,11 @@
 package com.huazaiki.enlistMap.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
 import com.huazaiki.enlistMap.entity.po.Soldier;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.huazaiki.enlistMap.entity.vo.UserPieVO;
 import com.huazaiki.enlistMap.entity.vo.UserRadarVO;
+import com.huazaiki.enlistMap.entity.vo.UserSortVO;
 
 import java.util.List;
 
@@ -37,5 +39,18 @@ public interface SoldierService extends IService<Soldier> {
      */
     UserRadarVO getAverageRadarData(UserRadarDTO userRadarDTO);
 
+    /**
+     *
+     * @param userRadarDTO
+     * @return
+     */
     List<Long> getGraphDataByAge(UserRadarDTO userRadarDTO);
+
+    UserSortVO getRecruitCountByProvince(Integer year);
+
+    List<Integer> getYearlyRecruitByProvince(String province);
+
+    List<UserPieVO> getEducationDistribution(String province, Integer year);
+
+    List<UserPieVO> getNationalRecruitByYear(Integer year);
 }
