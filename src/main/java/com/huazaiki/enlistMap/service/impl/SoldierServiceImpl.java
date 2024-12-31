@@ -163,12 +163,18 @@ public class SoldierServiceImpl extends ServiceImpl<SoldierMapper, Soldier>
         // 查询结果
         List<ProvinceRecruitVO> recruitList = soldierMapper.getRecruitCountByProvince(year);
 
+        // 限制为前 5 个数据
+        List<ProvinceRecruitVO> top5RecruitList = recruitList.stream()
+                .sorted(Comparator.comparingLong(ProvinceRecruitVO::getRecruitCount).reversed()) // 按 recruitCount 降序排序
+                .limit(5) // 保留前 5 个
+                .toList();
+
         // 转换为所需的数据结构
         UserSortVO userSortVO = new UserSortVO();
-        userSortVO.setNameData(recruitList.stream()
+        userSortVO.setNameData(top5RecruitList.stream()
                 .map(ProvinceRecruitVO::getProvince)
                 .toList());
-        userSortVO.setCountData(recruitList.stream()
+        userSortVO.setCountData(top5RecruitList.stream()
                 .map(ProvinceRecruitVO::getRecruitCount)
                 .toList());
         return userSortVO;
