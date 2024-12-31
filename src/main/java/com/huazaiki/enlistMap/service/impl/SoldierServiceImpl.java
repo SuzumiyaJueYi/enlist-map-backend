@@ -62,7 +62,6 @@ public class SoldierServiceImpl extends ServiceImpl<SoldierMapper, Soldier>
      * province为空时，查询全国某年上半年征兵人数
      * @param year
      * @param province
-     * @param gender
      * @return
      */
     public Long countFirstHalfYearSoldier(Integer year, String province) {

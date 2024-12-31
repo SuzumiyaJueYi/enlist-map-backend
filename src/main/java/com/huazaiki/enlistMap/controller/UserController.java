@@ -30,8 +30,6 @@ public class UserController {
 
     /**
      * 根据年份给出招收总人数
-     * @param year [2020, 2024]
-     * @return
      */
     @PostMapping("/overview")
     public Result overview(@RequestBody CommonYearDTO commonYearDTO) {
