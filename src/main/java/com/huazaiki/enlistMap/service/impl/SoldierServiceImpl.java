@@ -2,6 +2,8 @@ package com.huazaiki.enlistMap.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
 import com.huazaiki.enlistMap.entity.po.Soldier;
 import com.huazaiki.enlistMap.entity.vo.ProvinceRecruitVO;
@@ -226,6 +228,14 @@ public class SoldierServiceImpl extends ServiceImpl<SoldierMapper, Soldier>
                         (String) entry.get("name")   // 获取省份名称
                 ))
                 .toList();
+    }
+
+    @Override
+    public PageInfo<Soldier> getSoldierByPage(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Soldier> soldiers = soldierMapper.selectList(null);
+        PageInfo<Soldier> soldierPageInfo = new PageInfo<>(soldiers);
+        return soldierPageInfo;
     }
 }
 

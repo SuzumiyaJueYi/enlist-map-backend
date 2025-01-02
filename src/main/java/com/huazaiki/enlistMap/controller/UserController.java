@@ -4,11 +4,14 @@ package com.huazaiki.enlistMap.controller;
 import com.huazaiki.enlistMap.common.utils.Result;
 import com.huazaiki.enlistMap.entity.dto.CommonProvinceDTO;
 import com.huazaiki.enlistMap.entity.dto.CommonYearDTO;
+import com.huazaiki.enlistMap.entity.dto.UserLoginDTO;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
+import com.huazaiki.enlistMap.entity.po.User;
 import com.huazaiki.enlistMap.entity.vo.UserPieVO;
 import com.huazaiki.enlistMap.entity.vo.UserRadarVO;
 import com.huazaiki.enlistMap.entity.vo.UserSortVO;
 import com.huazaiki.enlistMap.service.SoldierService;
+import com.huazaiki.enlistMap.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +30,9 @@ public class UserController {
 
     @Autowired
     private SoldierService soldierService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 根据年份给出招收总人数
@@ -120,6 +126,20 @@ public class UserController {
             }
             List<UserPieVO> nationalRecruitByYear = soldierService.getNationalRecruitByYear(year);
             return Result.success(nationalRecruitByYear);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody UserLoginDTO userLoginDTO) {
+        try {
+            User user = userService.login(userLoginDTO.getUsername(), userLoginDTO.getPassword());
+            if (user != null) {
+                return Result.success(user);
+            } else {
+                return Result.unauthorized("用户名或密码错误");
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

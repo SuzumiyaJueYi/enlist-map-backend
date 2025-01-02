@@ -10,4 +10,5 @@ import com.huazaiki.enlistMap.entity.po.User;
 */
 public interface UserService extends IService<User> {
 
+    User login(String username, String password);
 }
