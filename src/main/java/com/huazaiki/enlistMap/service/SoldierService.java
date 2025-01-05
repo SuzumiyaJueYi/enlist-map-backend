@@ -2,7 +2,6 @@ package com.huazaiki.enlistMap.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.huazaiki.enlistMap.entity.dto.AdminPageQueryDTO;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
 import com.huazaiki.enlistMap.entity.po.Soldier;
 import com.huazaiki.enlistMap.entity.vo.UserPieVO;

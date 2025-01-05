@@ -4,9 +4,7 @@ package com.huazaiki.enlistMap.controller;
 import com.huazaiki.enlistMap.common.utils.Result;
 import com.huazaiki.enlistMap.entity.dto.CommonProvinceDTO;
 import com.huazaiki.enlistMap.entity.dto.CommonYearDTO;
-import com.huazaiki.enlistMap.entity.dto.UserLoginDTO;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
-import com.huazaiki.enlistMap.entity.po.User;
 import com.huazaiki.enlistMap.entity.vo.UserPieVO;
 import com.huazaiki.enlistMap.entity.vo.UserRadarVO;
 import com.huazaiki.enlistMap.entity.vo.UserSortVO;
@@ -35,10 +33,11 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 根据年份给出招收总人数
+     * 数据总览
+     * 根据所给年份(year)给出某年招收总人数
      */
     @PostMapping("/overview")
-    public Result overview(@RequestBody CommonYearDTO commonYearDTO) {
+    public Result<Long> overview(@RequestBody CommonYearDTO commonYearDTO) {
         Integer year = commonYearDTO.getYear();
         try {
             if (year < 2020 || year > 2024) {
@@ -51,8 +50,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 雷达图
+     * @param userRadarDTO 雷达图DTO
+     * @return 某省某年招收数据各项指标
+     */
     @PostMapping("/radar")
-    public Result radar(@RequestBody UserRadarDTO userRadarDTO) {
+    public Result<List<UserRadarVO>> radar(@RequestBody UserRadarDTO userRadarDTO) {
         try {
             if (userRadarDTO == null) {
                 return Result.failure(500, "输入条件不合理");
@@ -65,8 +69,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 折线图
+     * @param userRadarDTO 雷达图DTO
+     * @return 某省某年根据年龄统计招收人数
+     */
     @PostMapping("/graph")
-    public Result graph(@RequestBody UserRadarDTO userRadarDTO) {
+    public Result<List<Long>> graph(@RequestBody UserRadarDTO userRadarDTO) {
         try {
             if (userRadarDTO == null) {
                 return Result.failure(500, "输入条件不合理");
@@ -77,8 +86,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 排序
+     * @param commonYearDTO 年份DTO
+     * @return 某年招收人数数量按照省份降序
+     */
     @PostMapping("/sort")
-    public Result sort(@RequestBody CommonYearDTO commonYearDTO) {
+    public Result<UserSortVO> sort(@RequestBody CommonYearDTO commonYearDTO) {
         Integer year = commonYearDTO.getYear();
         try {
             if (year < 2020 || year > 2024) {
@@ -91,8 +105,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 柱状图
+     * @param commonProvinceDTO 年份DTO
+     * @return 某省入伍数量年度变化
+     */
     @PostMapping("/histogram")
-    public Result histogram(@RequestBody CommonProvinceDTO commonProvinceDTO) {
+    public Result<List<Integer>> histogram(@RequestBody CommonProvinceDTO commonProvinceDTO) {
         String province = commonProvinceDTO.getProvince();
         try {
             List<Integer> yearlyRecruitByProvince = soldierService.getYearlyRecruitByProvince(province);
@@ -102,8 +121,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 饼图
+     * @param userRadarDTO 雷达图DTO
+     * @return 某省某年征兵数据学历分布
+     */
     @PostMapping("/pie")
-    public Result pie(@RequestBody UserRadarDTO userRadarDTO) {
+    public Result<List<UserPieVO>> pie(@RequestBody UserRadarDTO userRadarDTO) {
         try {
             if (userRadarDTO == null) {
                 return Result.failure(500, "输入条件不合理");
@@ -117,8 +141,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 大地图
+     * @param commonYearDTO 年份DTO
+     * @return 某年全国征兵数据
+     */
     @PostMapping("/map")
-    public Result map(@RequestBody CommonYearDTO commonYearDTO) {
+    public Result<List<UserPieVO>> map(@RequestBody CommonYearDTO commonYearDTO) {
         Integer year = commonYearDTO.getYear();
         try {
             if (year < 2020 || year > 2024) {
@@ -126,20 +155,6 @@ public class UserController {
             }
             List<UserPieVO> nationalRecruitByYear = soldierService.getNationalRecruitByYear(year);
             return Result.success(nationalRecruitByYear);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping("/login")
-    public Result login(@RequestBody UserLoginDTO userLoginDTO) {
-        try {
-            User user = userService.login(userLoginDTO.getUsername(), userLoginDTO.getPassword());
-            if (user != null) {
-                return Result.success(user);
-            } else {
-                return Result.unauthorized("用户名或密码错误");
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

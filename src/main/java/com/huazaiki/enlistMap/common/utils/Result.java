@@ -6,10 +6,6 @@ import com.alibaba.fastjson2.JSONWriter;
 /**
  * 工具类 Result，统一返回结果封装。
  * 提供了多种静态方法便于快速构建常见的响应结果。
- * @param code http状态码
- * @param data 返回的数据主体
- * @param message http响应信息
- *
  * @complete 2025/01/02 00:17
  */
 public record Result<T>(int code, T data, String message) {

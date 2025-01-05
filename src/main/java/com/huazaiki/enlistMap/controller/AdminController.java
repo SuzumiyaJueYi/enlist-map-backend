@@ -2,7 +2,6 @@ package com.huazaiki.enlistMap.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.huazaiki.enlistMap.common.utils.RedisUtils;
 import com.huazaiki.enlistMap.common.utils.Result;
 import com.huazaiki.enlistMap.entity.dto.*;
 import com.huazaiki.enlistMap.entity.po.Soldier;
@@ -10,7 +9,6 @@ import com.huazaiki.enlistMap.entity.po.User;
 import com.huazaiki.enlistMap.entity.vo.AdminSoldiersVO;
 import com.huazaiki.enlistMap.service.SoldierService;
 import com.huazaiki.enlistMap.service.UserService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,6 +34,11 @@ public class AdminController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    /**
+     * 分页查询所有soldier
+     * @param adminQuerySoldierDTO admin接口用来查询soldier信息的实体
+     * @return  根据条件分页查询到的soldier数据
+     */
     @PatchMapping("/soldier")
     public Result getAllSoldier(@RequestBody AdminPageQueryDTO adminQuerySoldierDTO) {
         Integer pageNum = adminQuerySoldierDTO.getPageNum();
@@ -57,6 +60,9 @@ public class AdminController {
         return Result.success(new AdminSoldiersVO(page.getTotal(), page.getRecords()));
     }
 
+    /**
+     * 新增soldier
+     */
     @PostMapping("/soldier")
     public Result addSoldier(@RequestBody AdminSoldierInfoDTO adminSoldierInfoDTO) {
         try {
@@ -83,6 +89,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * 修改soldier信息
+     */
     @PutMapping("/soldier")
     public Result updateSoldier(@RequestBody AdminUpdateSoldierInfoDTO adminUpdateSoldierInfoDTO) {
         try {
@@ -100,6 +109,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * 根据id获取一个soldier
+     */
     @GetMapping("/soldier")
     public Result getSoldier(@RequestBody CommonIdDTO commonIdDTO) {
         Integer id = commonIdDTO.getId();
@@ -125,6 +137,9 @@ public class AdminController {
         return Result.success(soldier);
     }
 
+    /**
+     * 根据id删除soldier
+     */
     @DeleteMapping("/soldier/{id}")
     public Result deleteSoldier(@PathVariable Integer id) {
         try {
@@ -142,6 +157,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * 获取所有user信息
+     */
     @GetMapping("/user")
     public Result getAllUsers() {
         // 尝试从 Redis 获取缓存数据
@@ -161,6 +179,9 @@ public class AdminController {
     }
 
 
+    /**
+     * 修改user
+     */
     @PostMapping("/user")
     public Result updateUser(@RequestBody AdminUpdateUserInfoDTO adminUpdateUserInfoDTO) {
         try {
@@ -178,7 +199,9 @@ public class AdminController {
         }
     }
 
-
+    /**
+     * 根据id获取一个user
+     */
     @PutMapping("/user")
     public Result getUserById(@RequestBody CommonIdDTO commonIdDTO) {
         Integer id = commonIdDTO.getId();

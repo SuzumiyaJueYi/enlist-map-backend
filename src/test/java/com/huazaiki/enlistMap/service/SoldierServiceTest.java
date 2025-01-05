@@ -1,11 +1,8 @@
 package com.huazaiki.enlistMap.service;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.huazaiki.enlistMap.entity.dto.UserRadarDTO;
 import com.huazaiki.enlistMap.entity.enums.ProvinceEnum;
-import com.huazaiki.enlistMap.entity.po.Soldier;
-import com.huazaiki.enlistMap.entity.vo.UserRadarVO;
 import com.huazaiki.enlistMap.mapper.SoldierMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
