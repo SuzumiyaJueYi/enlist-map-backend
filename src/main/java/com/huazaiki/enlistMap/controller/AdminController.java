@@ -1,6 +1,8 @@
 package com.huazaiki.enlistMap.controller;
 
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.huazaiki.enlistMap.common.utils.Result;
 import com.huazaiki.enlistMap.entity.dto.*;
@@ -46,7 +48,11 @@ public class AdminController {
         String cacheKey = "soldiers_page_" + pageNum + "_" + pageSize;
 
         // 尝试从 Redis 获取缓存数据
-        Page<Soldier> cachedPage = (Page<Soldier>) redisTemplate.opsForValue().get(cacheKey);
+        Object data = redisTemplate.opsForValue().get(cacheKey);
+
+        String jsonString = JSON.toJSONString(data);
+
+        Page cachedPage = JSONObject.parseObject(jsonString, Page.class);
         if (cachedPage != null) {
             return Result.success(new AdminSoldiersVO(cachedPage.getTotal(), cachedPage.getRecords()));
         }
